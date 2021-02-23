@@ -1,0 +1,19 @@
+<%- include("./header.ejs")  %> 
+
+    <section class="welcome">   
+        <p>Hi there! Your game URL is</p>
+        <p class="linkContainer">
+            <a href="#"></a>
+        </p>
+        <p>
+            Share the link with a friend to play with.
+        </p>
+    </section>
+    <script>
+        const id = "<%= id %>";  
+        const url = `${window.location}game?id=${id}`;
+        document.querySelector("a").textContent = url;
+        document.querySelector("a").href = url;
+    </script> 
+
+    <%- include("./footer.ejs")  %> 

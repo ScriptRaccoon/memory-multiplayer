@@ -1,0 +1,134 @@
+/* global stuff */
+
+*,
+*::after,
+*::before {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 18px;
+    background: #111115;
+    color: #eee;
+    line-height: 1.4;
+}
+
+/* links */
+
+a {
+    text-decoration: none;
+    color: orange;
+}
+
+a:hover {
+    color: rgb(255, 217, 0);
+}
+
+/* header */
+
+header {
+    text-align: center;
+    font-size: 40px;
+    padding: 40px 0px;
+}
+
+/* welcome page */
+
+.welcome {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.linkContainer {
+    padding: 20px 0px;
+}
+
+/* game section */
+
+.game {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    height: 700px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.game > span {
+    font-size: 25px;
+}
+
+/* cards */
+
+.card {
+    margin: 0px 24px;
+    width: 100px;
+    height: 140px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    display: none;
+}
+
+.card .front {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    background-position: center;
+    background-size: contain;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+}
+
+.card .back {
+    background-color: white;
+    display: block;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+}
+
+.back::before {
+    content: "";
+    width: 90px;
+    height: 130px;
+    background-color: rgb(77, 143, 204);
+    border-radius: 6px;
+}
+
+/* card animation */
+
+.card.turned {
+    animation: turn-around 250ms ease-in;
+}
+
+@keyframes turn-around {
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(90deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
+}
+
+/* status message */
+#statusMessage {
+    display: none;
+    padding: 30px 0px;
+    text-align: center;
+}
