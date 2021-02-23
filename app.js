@@ -17,19 +17,22 @@ const games = [];
 app.get("/", (req, res) => {
     const id = shortid.generate();
     res.render("welcome", { id });
+    games.push({ id, players: [] });
+    console.log(games);
 });
 
 app.get("/game", (req, res) => {
     const id = req.query.id;
-    if (!id) {
+    if (!id || !games.map((game) => game.id).includes(id)) {
         return res.redirect("/");
     }
     res.render("game", { id });
-    games.push({ id, players: [] });
+    console.log(games);
 });
 
 io.on("connect", (socket) => {
     console.log(socket.id);
+    console.log(games);
     socket.on("gameId", (gameId) => {
         const game = games.find((game) => game.id === gameId);
         if (!game || game.players.length >= 2) {
@@ -39,6 +42,7 @@ io.on("connect", (socket) => {
         game.players.push(socket.id);
         socket.join(gameId);
         io.to(gameId).emit("userNumber", game.players.length);
+        console.log(games);
     });
     socket.on("disconnect", () => {
         const index = games.findIndex((game) => game.players.includes(socket.id));
@@ -47,6 +51,7 @@ io.on("connect", (socket) => {
             const otherSocket = game.players.find((player) => player != socket.id);
             io.to(otherSocket).emit("redirectHome");
             games.splice(index, 1);
+            console.log(games);
         }
     });
 });
