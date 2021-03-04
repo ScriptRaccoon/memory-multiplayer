@@ -10,15 +10,14 @@ app.set("view engine", "ejs");
 const socket = require("socket.io");
 const io = socket(server);
 
-const shortid = require("shortid");
+const { Game } = require("./Game.js");
 
 const games = [];
 
 app.get("/", (req, res) => {
-    const id = shortid.generate();
-    res.render("welcome", { id });
-    games.push({ id, players: [] });
-    console.log(games);
+    const game = new Game(io);
+    games.push(game);
+    res.render("welcome", { id: game.id });
 });
 
 app.get("/game", (req, res) => {
@@ -27,12 +26,9 @@ app.get("/game", (req, res) => {
         return res.redirect("/");
     }
     res.render("game", { id });
-    console.log(games);
 });
 
 io.on("connect", (socket) => {
-    console.log(socket.id);
-    console.log(games);
     socket.on("gameId", (gameId) => {
         const game = games.find((game) => game.id === gameId);
         if (!game || game.players.length >= 2) {
@@ -40,9 +36,9 @@ io.on("connect", (socket) => {
             return;
         }
         game.players.push(socket.id);
-        socket.join(gameId);
-        io.to(gameId).emit("userNumber", game.players.length);
-        console.log(games);
+        if (game.players.length === 2) {
+            game.start();
+        }
     });
     socket.on("disconnect", () => {
         const index = games.findIndex((game) => game.players.includes(socket.id));
@@ -51,7 +47,12 @@ io.on("connect", (socket) => {
             const otherSocket = game.players.find((player) => player != socket.id);
             io.to(otherSocket).emit("redirectHome");
             games.splice(index, 1);
-            console.log(games);
+        }
+    });
+    socket.on("openCard", ({ gameId, playerIndex, cardId }) => {
+        const game = games.find((game) => game.id === gameId);
+        if (game && game.turn === playerIndex) {
+            game.openCard(cardId);
         }
     });
 });
