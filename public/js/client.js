@@ -1,6 +1,6 @@
 let playerIndex = null;
 
-$("#statusMessage").html("Waiting for an opponent...").fadeIn();
+$("#status").html("Waiting for an opponent...").fadeIn();
 
 const socket = io();
 
@@ -10,10 +10,9 @@ socket.on("connect", () => {
 
 socket.on("redirectHome", () => {
     $("#game").hide();
-    $("#roundMessage").hide();
+    $("#score").hide();
     const seconds = 3;
-    $("#statusMessage")
-        .html(`This game is either full or does not exist (anymore).<br><br>
+    $("#status").html(`This game is either full or does not exist (anymore).<br><br>
     You will be redirected to the main page in ${seconds} seconds.`);
     setTimeout(redirectHome, seconds * 1000);
 });
@@ -45,12 +44,12 @@ socket.on("gameStart", ({ index, cardAmount }) => {
 });
 
 socket.on("turn", () => {
-    $("#statusMessage").html("It's your turn");
+    $("#status").html("It's your turn");
     $(".card").css("cursor", "pointer");
 });
 
 socket.on("noturn", () => {
-    $("#statusMessage").html("It's your opponent's turn");
+    $("#status").html("It's your opponent's turn");
     $(".card").css("cursor", "not-allowed");
 });
 
@@ -80,9 +79,9 @@ socket.on("closeCard", ({ cardId, duration }) => {
 });
 
 socket.on("win", (message) => {
-    $("#statusMessage").html(message);
+    $("#status").html(message);
 });
 
-socket.on("round", (round) => {
-    $("#roundMessage").text(`Round ${round}`);
+socket.on("scores", ({ round, scores }) => {
+    $("#score").text(`Round ${round} / Score ${scores[playerIndex]}`);
 });

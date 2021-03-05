@@ -19,6 +19,7 @@ class Game {
         this.io = io;
         this.id = shortid.generate();
         this.players = [];
+        this.scores = [0, 0];
         this.pairedCards = 0;
         this.previousCard = null;
         this.turnDuration = 250;
@@ -40,7 +41,7 @@ class Game {
         setTimeout(() => {
             this.round++;
             this.turn = this.round % 2 === 0 ? 1 : 0;
-            this.showRound();
+            this.showScores();
             this.showTurn();
         }, 6 * this.turnDuration);
     }
@@ -52,7 +53,7 @@ class Game {
                 cardAmount: this.cardAmount,
             });
         }
-        this.showRound();
+        this.showScores();
         this.showTurn();
     }
 
@@ -61,9 +62,11 @@ class Game {
         this.io.to(this.players[1 - this.turn]).emit("noturn");
     }
 
-    showRound() {
+    showScores() {
         for (let i = 0; i < 2; i++) {
-            this.io.to(this.players[i]).emit("round", this.round);
+            this.io
+                .to(this.players[i])
+                .emit("scores", { round: this.round, scores: this.scores });
         }
     }
 
@@ -152,10 +155,11 @@ class Game {
     }
 
     handleWin() {
-        this.io.to(this.players[this.turn]).emit("win", "You won the game!");
-        this.io
-            .to(this.players[1 - this.turn])
-            .emit("win", "Your opponent won the game!");
+        this.scores[this.turn]++;
+        const winner = this.players[this.turn];
+        const loser = this.players[1 - this.turn];
+        this.io.to(winner).emit("win", "You won the game!");
+        this.io.to(loser).emit("win", "Your opponent won the game!");
         this.restart();
     }
 }

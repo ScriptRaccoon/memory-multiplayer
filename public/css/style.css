@@ -128,15 +128,15 @@ a:hover {
     }
 }
 
-/* status message */
+/* status and score  */
 
-#statusMessage {
+#status {
     display: none;
     text-align: center;
     margin-bottom: 20px;
 }
 
-#roundMessage {
+#score {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
