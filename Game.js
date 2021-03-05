@@ -1,6 +1,10 @@
 const fetch = require("node-fetch");
 const shortid = require("shortid");
 
+const { io } = require("./socket.js");
+
+const games = [];
+
 const CARD_STATES = {
     OPEN: 0,
     CLOSED: 1,
@@ -15,8 +19,7 @@ function shuffle(list) {
 }
 
 class Game {
-    constructor(io) {
-        this.io = io;
+    constructor() {
         this.id = shortid.generate();
         this.players = [];
         this.scores = [0, 0];
@@ -31,6 +34,24 @@ class Game {
         this.generateCards();
         this.turn = 0;
         this.round = 1;
+        games.push(this);
+    }
+
+    static findGameById(id) {
+        return games.find((game) => game.id === id);
+    }
+
+    static findGameByPlayer(id) {
+        return games.find((game) => game.players.includes(id));
+    }
+
+    remove() {
+        const index = games.findIndex((game) => game.id === this.id);
+        games.splice(index, 1);
+        for (const player of this.players) {
+            io.to(player).emit("redirectHome");
+            io.to(player).emit("redirectHome");
+        }
     }
 
     restart() {
@@ -48,7 +69,7 @@ class Game {
 
     start() {
         for (let i = 0; i < 2; i++) {
-            this.io.to(this.players[i]).emit("gameStart", {
+            io.to(this.players[i]).emit("gameStart", {
                 index: i,
                 cardAmount: this.cardAmount,
             });
@@ -58,15 +79,16 @@ class Game {
     }
 
     showTurn() {
-        this.io.to(this.players[this.turn]).emit("turn");
-        this.io.to(this.players[1 - this.turn]).emit("noturn");
+        io.to(this.players[this.turn]).emit("turn");
+        io.to(this.players[1 - this.turn]).emit("noturn");
     }
 
     showScores() {
         for (let i = 0; i < 2; i++) {
-            this.io
-                .to(this.players[i])
-                .emit("scores", { round: this.round, scores: this.scores });
+            io.to(this.players[i]).emit("scores", {
+                round: this.round,
+                scores: this.scores,
+            });
         }
     }
 
@@ -107,7 +129,7 @@ class Game {
         if (!this.canOpen) return;
         card.state = CARD_STATES.OPEN;
         for (const player of this.players) {
-            this.io.to(player).emit("openCard", {
+            io.to(player).emit("openCard", {
                 cardId: cardId,
                 image: card.image,
                 duration: this.turnDuration,
@@ -143,7 +165,7 @@ class Game {
     closeCard(card) {
         setTimeout(() => {
             for (const player of this.players) {
-                this.io.to(player).emit("closeCard", {
+                io.to(player).emit("closeCard", {
                     cardId: card.id,
                     duration: this.turnDuration,
                 });
@@ -158,8 +180,8 @@ class Game {
         this.scores[this.turn]++;
         const winner = this.players[this.turn];
         const loser = this.players[1 - this.turn];
-        this.io.to(winner).emit("win", "You won the game!");
-        this.io.to(loser).emit("win", "Your opponent won the game!");
+        io.to(winner).emit("win", "You won the game!");
+        io.to(loser).emit("win", "Your opponent won the game!");
         this.restart();
     }
 }

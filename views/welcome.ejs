@@ -3,7 +3,7 @@
     <section class="welcome">   
         <p>Hi there! Your game URL is</p>
         <p class="linkContainer">
-            <a title="game url" href="#"></a> <i id="copyBtn" title="copy url to clipboard" class="fas fa-clipboard"></i>
+            <a title="game url" id="link" href="#"></a> <i id="copyBtn" title="copy url to clipboard" class="fas fa-clipboard"></i>
         </p>
 
         <p>
@@ -24,8 +24,9 @@
         }
         const id = "<%= id %>";  
         const url = `${window.location}game?id=${id}`;
-        document.querySelector("a").textContent = url;
-        document.querySelector("a").href = url;
+        const link = document.getElementById("link");
+        link.textContent = url;
+        link.href = url;
         const copyBtn = document.getElementById("copyBtn");
         copyBtn.addEventListener("click", () => {
             copyStringToClipboard(url);
