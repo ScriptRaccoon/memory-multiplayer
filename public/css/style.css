@@ -29,10 +29,17 @@ a:hover {
 
 /* header */
 
-header {
+.header {
     text-align: center;
     font-size: 40px;
     padding: 40px 0px;
+}
+
+.header.duringGame {
+    text-align: left;
+    font-size: 18px;
+    padding: 15px;
+    opacity: 0.5;
 }
 
 /* welcome page */

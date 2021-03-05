@@ -27,6 +27,7 @@ function redirectHome() {
 $("#closeBtn").click(redirectHome);
 
 socket.on("gameStart", ({ index, cardAmount }) => {
+    $(".header").addClass("duringGame");
     playerIndex = index;
     for (let i = 0; i < cardAmount / 2; i++) {
         for (let j = 0; j < 2; j++) {
