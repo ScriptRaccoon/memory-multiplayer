@@ -123,10 +123,17 @@ header {
 }
 
 /* status message */
+
 #statusMessage {
     display: none;
     text-align: center;
     margin-bottom: 20px;
+}
+
+#roundMessage {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
 }
 
 /* controls */

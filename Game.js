@@ -29,6 +29,20 @@ class Game {
         this.canOpen = true;
         this.generateCards();
         this.turn = 0;
+        this.round = 1;
+    }
+
+    restart() {
+        for (const card of this.cards) {
+            this.closeCard(card);
+        }
+        this.generateCards();
+        setTimeout(() => {
+            this.round++;
+            this.turn = this.round % 2 === 0 ? 1 : 0;
+            this.showRound();
+            this.showTurn();
+        }, 6 * this.turnDuration);
     }
 
     start() {
@@ -38,12 +52,19 @@ class Game {
                 cardAmount: this.cardAmount,
             });
         }
+        this.showRound();
         this.showTurn();
     }
 
     showTurn() {
         this.io.to(this.players[this.turn]).emit("turn");
         this.io.to(this.players[1 - this.turn]).emit("noturn");
+    }
+
+    showRound() {
+        for (let i = 0; i < 2; i++) {
+            this.io.to(this.players[i]).emit("round", this.round);
+        }
     }
 
     changeTurns() {
@@ -121,7 +142,6 @@ class Game {
             for (const player of this.players) {
                 this.io.to(player).emit("closeCard", {
                     cardId: card.id,
-                    image: card.image,
                     duration: this.turnDuration,
                 });
             }
@@ -136,6 +156,7 @@ class Game {
         this.io
             .to(this.players[1 - this.turn])
             .emit("win", "Your opponent won the game!");
+        this.restart();
     }
 }
 

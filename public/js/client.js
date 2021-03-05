@@ -10,6 +10,7 @@ socket.on("connect", () => {
 
 socket.on("redirectHome", () => {
     $("#game").hide();
+    $("#roundMessage").hide();
     const seconds = 3;
     $("#statusMessage")
         .html(`This game is either full or does not exist (anymore).<br><br>
@@ -27,7 +28,6 @@ $("#closeBtn").click(redirectHome);
 
 socket.on("gameStart", ({ index, cardAmount }) => {
     playerIndex = index;
-    $("#game").html("").css("opacity", 1);
     for (let i = 0; i < cardAmount / 2; i++) {
         for (let j = 0; j < 2; j++) {
             const cardId = 2 * i + j;
@@ -64,7 +64,7 @@ socket.on("openCard", ({ cardId, image, duration }) => {
     }, duration);
 });
 
-socket.on("closeCard", ({ cardId, image, duration }) => {
+socket.on("closeCard", ({ cardId, duration }) => {
     const card = $(`#card-${cardId}`);
     card.addClass("turned");
     setTimeout(() => {
@@ -77,12 +77,9 @@ socket.on("closeCard", ({ cardId, image, duration }) => {
 });
 
 socket.on("win", (message) => {
-    $("#game").css("opacity", 0.5);
     $("#statusMessage").html(message);
 });
 
-// for debugging
-// socket.on("message", (msg) => {
-//     console.log("new message from server:");
-//     console.log(msg);
-// });
+socket.on("round", (round) => {
+    $("#roundMessage").text(`Round ${round}`);
+});
