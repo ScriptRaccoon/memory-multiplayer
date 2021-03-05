@@ -3,17 +3,38 @@
     <section class="welcome">   
         <p>Hi there! Your game URL is</p>
         <p class="linkContainer">
-            <a href="#"></a>
+            <a title="game url" href="#"></a> <i id="copyBtn" title="copy url to clipboard" class="fas fa-clipboard"></i>
         </p>
+
         <p>
             Share the link with a friend to play with.
         </p>
     </section>
+
     <script>
+        function copyStringToClipboard(str) {
+            const el = document.createElement("textarea");
+            el.style.opacity = 0;
+            el.value = str;
+            el.setAttribute("readonly", "");
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            el.remove();
+        }
         const id = "<%= id %>";  
         const url = `${window.location}game?id=${id}`;
         document.querySelector("a").textContent = url;
         document.querySelector("a").href = url;
+        const copyBtn = document.getElementById("copyBtn");
+        copyBtn.addEventListener("click", () => {
+            copyStringToClipboard(url);
+            copyBtn.classList.add("clicked");
+            setTimeout(() => {
+                copyBtn.classList.remove("clicked");
+            },200);
+        });
+
     </script> 
 
     <%- include("./footer.ejs")  %> 
