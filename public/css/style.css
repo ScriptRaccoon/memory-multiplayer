@@ -74,7 +74,6 @@ a:hover {
     width: 100px;
     height: 140px;
     text-align: center;
-    cursor: pointer;
     position: relative;
     display: none;
 }

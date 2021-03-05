@@ -46,10 +46,12 @@ socket.on("gameStart", ({ index, cardAmount }) => {
 
 socket.on("turn", () => {
     $("#statusMessage").html("It's your turn");
+    $(".card").css("cursor", "pointer");
 });
 
 socket.on("noturn", () => {
     $("#statusMessage").html("It's your opponent's turn");
+    $(".card").css("cursor", "not-allowed");
 });
 
 socket.on("openCard", ({ cardId, image, duration }) => {
