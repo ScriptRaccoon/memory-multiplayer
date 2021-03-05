@@ -9,16 +9,21 @@ socket.on("connect", () => {
 });
 
 socket.on("redirectHome", () => {
+    $("#game").hide();
     const seconds = 3;
     $("#statusMessage")
         .html(`This game is either full or does not exist (anymore).<br><br>
     You will be redirected to the main page in ${seconds} seconds.`);
-    setTimeout(() => {
-        const url = window.location;
-        const baseURL = url.protocol + "//" + url.host + "/" + url.pathname.split("/")[1];
-        window.location.href = baseURL;
-    }, seconds * 1000);
+    setTimeout(redirectHome, seconds * 1000);
 });
+
+function redirectHome() {
+    const url = window.location;
+    const baseURL = url.protocol + "//" + url.host + "/" + url.pathname.split("/")[1];
+    window.location.href = baseURL;
+}
+
+$("#closeBtn").click(redirectHome);
 
 socket.on("gameStart", ({ index, cardAmount }) => {
     playerIndex = index;
