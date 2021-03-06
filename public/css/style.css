@@ -1,5 +1,15 @@
 /* global stuff */
 
+:root {
+    --link-color: orange;
+    --link-hover-color: rgb(255, 217, 0);
+    --card-inner-color: rgb(77, 143, 204);
+    --card-shadow-color: rgba(255, 255, 255, 0.3);
+    --card-border-color: white;
+    --background-color: #111115;
+    --font-color: #eee;
+}
+
 *,
 *::after,
 *::before {
@@ -11,8 +21,8 @@
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 18px;
-    background: #111115;
-    color: #eee;
+    background: var(--background-color);
+    color: var(--font-color);
     line-height: 1.4;
 }
 
@@ -20,11 +30,11 @@ body {
 
 a {
     text-decoration: none;
-    color: orange;
+    color: var(--link-color);
 }
 
 a:hover {
-    color: rgb(255, 217, 0);
+    color: var(--link-hover-color);
 }
 
 /* header */
@@ -86,12 +96,12 @@ a:hover {
     border-radius: 10px;
     background-position: center;
     background-size: contain;
-    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 0px 10px var(--card-shadow-color);
     z-index: 0;
 }
 
 .card .back {
-    background-color: white;
+    background-color: var(--card-border-color);
     width: 100%;
     height: 100%;
     position: absolute;
@@ -99,7 +109,7 @@ a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.3);
+    box-shadow: 0px 0px 10px var(--card-shadow-color);
     z-index: 1;
 }
 
@@ -107,7 +117,7 @@ a:hover {
     content: "";
     width: 90px;
     height: 130px;
-    background-color: rgb(77, 143, 204);
+    background-color: var(--card-inner-color);
     border-radius: 6px;
 }
 
@@ -152,27 +162,27 @@ a:hover {
     font-size: 25px;
 }
 
-#controls > * {
+#controls > i {
     opacity: 0.5;
     margin: 0px 5px;
     cursor: pointer;
 }
 
-#controls > *:hover {
+#controls > i:hover {
     opacity: 1;
 }
 
 /* copy btn */
 
 #copyBtn {
-    color: orange;
+    color: var(--link-color);
     font-size: 20px;
     margin: 10px;
     cursor: pointer;
 }
 
 #copyBtn:hover {
-    color: rgb(255, 217, 0);
+    color: var(--link-hover-color);
 }
 
 #copyBtn.clicked {
