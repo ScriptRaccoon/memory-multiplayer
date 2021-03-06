@@ -35,6 +35,7 @@ class Game {
         this.round = 1;
         this.lastMoveTime = null;
         games.push(this);
+        this.generateCards();
     }
 
     static findGameById(id) {
@@ -76,9 +77,7 @@ class Game {
         for (const card of this.cards) {
             this.closeCard(card);
         }
-        io.to(this.id).emit("loading", true);
         await this.generateCards();
-        io.to(this.id).emit("loading", false);
         this.round++;
         this.turn = this.round % 2 === 0 ? 1 : 0;
         this.showTurn();
@@ -104,6 +103,7 @@ class Game {
     }
 
     async generateCards() {
+        io.to(this.id).emit("loading", true);
         this.canOpen = false;
         this.pairedCards = 0;
         this.previousCard = null;
@@ -130,6 +130,7 @@ class Game {
         }
 
         this.canOpen = true;
+        io.to(this.id).emit("loading", false);
     }
 
     openCard(cardId) {

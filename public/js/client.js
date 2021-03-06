@@ -85,7 +85,7 @@ socket.on("score", ({ round, score }) => {
 
 socket.on("loading", (loading) => {
     if (loading) {
-        $("#status").html("Images are loaded...");
+        $("#status").html("Images are loading...");
         $("#game").css("opacity", 0.7);
     } else {
         $("#game").css("opacity", 1);

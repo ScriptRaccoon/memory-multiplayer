@@ -18,8 +18,8 @@ app.get("/game", async (req, res) => {
         return res.redirect("/");
     }
     if (!Game.findGameById(id)) {
+        res.render("gameloading");
         const game = new Game(id);
-        await game.generateCards();
     }
     res.render("game", { id });
 });
