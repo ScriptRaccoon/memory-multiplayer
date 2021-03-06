@@ -1,20 +1,24 @@
 const { app } = require("./server.js");
 const { io } = require("./socket.js");
+const shortid = require("shortid");
 
 // import game class
 const { Game } = require("./Game.js");
 
 // start route
 app.get("/", (req, res) => {
-    const game = new Game();
-    res.render("welcome", { id: game.id });
+    const id = shortid.generate();
+    res.render("welcome", { id });
 });
 
 // game route
 app.get("/game", (req, res) => {
     const id = req.query.id;
-    if (!id || !Game.findGameById(id)) {
+    if (!id) {
         return res.redirect("/");
+    }
+    if (!Game.findGameById(id)) {
+        new Game(id);
     }
     res.render("game", { id });
 });

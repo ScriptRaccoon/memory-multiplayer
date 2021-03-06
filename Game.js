@@ -1,5 +1,4 @@
 const fetch = require("node-fetch");
-const shortid = require("shortid");
 
 const { io } = require("./socket.js");
 
@@ -11,6 +10,8 @@ const CARD_STATES = {
     PAIRED: 2,
 };
 
+const oneHour = 1000 * 60 * 60;
+
 function shuffle(list) {
     for (let i = list.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -19,8 +20,8 @@ function shuffle(list) {
 }
 
 class Game {
-    constructor() {
-        this.id = shortid.generate();
+    constructor(id) {
+        this.id = id;
         this.players = [];
         this.scores = [0, 0];
         this.pairedCards = 0;
@@ -35,6 +36,7 @@ class Game {
         this.turn = 0;
         this.round = 1;
         games.push(this);
+        this.lastMoveTime = null;
     }
 
     static findGameById(id) {
@@ -76,6 +78,8 @@ class Game {
         }
         this.showScores();
         this.showTurn();
+        this.lastMoveTime = new Date().getTime();
+        setTimeout(() => this.removeWhenIdle(), oneHour);
     }
 
     showTurn() {
@@ -125,8 +129,10 @@ class Game {
 
     openCard(cardId) {
         const card = this.cards[cardId];
+        if (!card) return;
         if (card.state != CARD_STATES.CLOSED) return;
         if (!this.canOpen) return;
+        this.lastMoveTime = new Date().getTime();
         card.state = CARD_STATES.OPEN;
         for (const player of this.players) {
             io.to(player).emit("openCard", {
@@ -183,6 +189,15 @@ class Game {
         io.to(winner).emit("win", "You won the game!");
         io.to(loser).emit("win", "Your opponent won the game!");
         this.restart();
+    }
+
+    removeWhenIdle() {
+        const currentTime = new Date().getTime();
+        if (currentTime - this.lastMoveTime > oneHour) {
+            this.remove();
+        } else {
+            setTimeout(() => this.removeWhenIdle(), oneHour);
+        }
     }
 }
 
