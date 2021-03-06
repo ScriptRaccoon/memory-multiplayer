@@ -110,8 +110,11 @@ class Game {
                 const height = randInt(this.cardHeight, this.cardHeight + this.variation);
                 const response = await fetch(`https://unsplash.it/${width}/${height}`);
                 const { url } = response;
-                imageURLs.push(url);
-                imageURLs.push(url);
+                if (imageURLs.includes(url)) {
+                    i--;
+                } else {
+                    imageURLs.push(url, url);
+                }
             } catch (err) {
                 console.log(err);
                 return;
