@@ -24,7 +24,6 @@ function redirectHome() {
 $("#closeBtn").click(redirectHome);
 
 socket.on("gameStart", ({ cardAmount }) => {
-    $(".header").addClass("duringGame");
     for (let i = 0; i < cardAmount / 2; i++) {
         for (let j = 0; j < 2; j++) {
             const cardId = 2 * i + j;
