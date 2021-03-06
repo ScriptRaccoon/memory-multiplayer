@@ -28,7 +28,7 @@ io.on("connect", (socket) => {
     socket.on("gameId", (gameId) => {
         const game = Game.findGameById(gameId);
         if (!game || game.players.length >= 2) {
-            socket.emit("redirectHome");
+            socket.emit("redirectHome", { reason: "This game is already full." });
         } else {
             game.players.push(socket.id);
             if (game.players.length === 2) {
@@ -39,7 +39,7 @@ io.on("connect", (socket) => {
     socket.on("disconnect", () => {
         const game = Game.findGameByPlayer(socket.id);
         if (!game) return;
-        game.remove();
+        game.remove({ reason: "The other player has disconnected." });
     });
     socket.on("openCard", ({ gameId, playerIndex, cardId }) => {
         const game = Game.findGameById(gameId);

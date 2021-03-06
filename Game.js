@@ -47,12 +47,12 @@ class Game {
         return games.find((game) => game.players.includes(id));
     }
 
-    remove() {
+    remove({ reason }) {
         const index = games.findIndex((game) => game.id === this.id);
         games.splice(index, 1);
         for (const player of this.players) {
-            io.to(player).emit("redirectHome");
-            io.to(player).emit("redirectHome");
+            io.to(player).emit("redirectHome", { reason });
+            io.to(player).emit("redirectHome", { reason });
         }
     }
 
@@ -186,15 +186,15 @@ class Game {
         this.scores[this.turn]++;
         const winner = this.players[this.turn];
         const loser = this.players[1 - this.turn];
-        io.to(winner).emit("win", "You won the game!");
-        io.to(loser).emit("win", "Your opponent won the game!");
+        io.to(winner).emit("winMessage", "You won the round!");
+        io.to(loser).emit("winMessage", "You lost the round!");
         this.restart();
     }
 
     removeWhenIdle() {
         const currentTime = new Date().getTime();
         if (currentTime - this.lastMoveTime > oneHour) {
-            this.remove();
+            this.remove({ reason: "This game has been detected as idle." });
         } else {
             setTimeout(() => this.removeWhenIdle(), oneHour);
         }

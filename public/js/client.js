@@ -8,11 +8,11 @@ socket.on("connect", () => {
     socket.emit("gameId", gameId);
 });
 
-socket.on("redirectHome", () => {
+socket.on("redirectHome", ({ reason }) => {
     $("#game").hide();
     $("#score").hide();
     const seconds = 3;
-    $("#status").html(`This game is either full or does not exist (anymore).<br><br>
+    $("#status").html(`${reason}<br><br>
     You will be redirected to the main page in ${seconds} seconds.`);
     setTimeout(redirectHome, seconds * 1000);
 });
@@ -78,7 +78,7 @@ socket.on("closeCard", ({ cardId, duration }) => {
     }, duration);
 });
 
-socket.on("win", (message) => {
+socket.on("winMessage", (message) => {
     $("#status").html(message);
 });
 
