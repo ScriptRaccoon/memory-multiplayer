@@ -32,11 +32,10 @@ class Game {
         this.cardHeight = 140;
         this.cards = [];
         this.canOpen = true;
-        this.generateCards();
         this.turn = 0;
         this.round = 1;
-        games.push(this);
         this.lastMoveTime = null;
+        games.push(this);
     }
 
     static findGameById(id) {
@@ -60,13 +59,13 @@ class Game {
         for (const card of this.cards) {
             this.closeCard(card);
         }
-        this.generateCards();
         setTimeout(() => {
             this.round++;
             this.turn = this.round % 2 === 0 ? 1 : 0;
             this.showScores();
             this.showTurn();
         }, 6 * this.turnDuration);
+        this.generateCards();
     }
 
     start() {

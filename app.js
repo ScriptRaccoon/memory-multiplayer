@@ -12,13 +12,14 @@ app.get("/", (req, res) => {
 });
 
 // game route
-app.get("/game", (req, res) => {
+app.get("/game", async (req, res) => {
     const id = req.query.id;
     if (!id) {
         return res.redirect("/");
     }
     if (!Game.findGameById(id)) {
-        new Game(id);
+        const game = new Game(id);
+        await game.generateCards();
     }
     res.render("game", { id });
 });
