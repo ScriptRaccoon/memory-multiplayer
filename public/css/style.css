@@ -63,9 +63,8 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
-    width: 600px;
-    height: 700px;
+    align-items: flex-start;
+    width: 500px;
     margin: 0 auto;
     overflow: hidden;
     transition: opacity 150ms ease-in-out;
@@ -74,7 +73,7 @@ a:hover {
 /* cards */
 
 .card {
-    margin: 0px 24px;
+    margin: 10px;
     width: 100px;
     height: 140px;
     text-align: center;
@@ -191,5 +190,29 @@ a:hover {
     }
     100% {
         transform: scale(1);
+    }
+}
+
+/* media queries */
+
+@media (max-height: 800px) and (min-width: 1000px) {
+    .game {
+        width: 1000px;
+    }
+}
+
+@media (max-width: 500px) {
+    .game {
+        padding-top: 20px;
+        width: 280px;
+    }
+    .card {
+        width: 50px;
+        height: 70px;
+        margin: 5px;
+    }
+    .back::before {
+        width: 45px;
+        height: 65px;
     }
 }
