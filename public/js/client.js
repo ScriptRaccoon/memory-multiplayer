@@ -53,9 +53,10 @@ socket.on("noturn", () => {
 socket.on("openCard", ({ cardId, image, duration }) => {
     const card = $(`#card-${cardId}`);
     card.addClass("turned");
+    card.children(".front").css("backgroundImage", `url(${image})`);
     setTimeout(() => {
-        card.children(".front").show().css("backgroundImage", `url(${image})`);
-        card.children(".back").hide();
+        card.children(".front").css("zIndex", 1);
+        card.children(".back").css("zIndex", 0);
     }, duration / 2);
 
     setTimeout(() => {
@@ -67,10 +68,11 @@ socket.on("closeCard", ({ cardId, duration }) => {
     const card = $(`#card-${cardId}`);
     card.addClass("turned");
     setTimeout(() => {
-        card.children(".front").hide().css("backgroundImage", "");
-        card.children(".back").show();
+        card.children(".front").css("zIndex", 0);
+        card.children(".back").css("zIndex", 1);
     }, duration / 2);
     setTimeout(() => {
+        card.children(".front").css("backgroundImage", "");
         card.removeClass("turned");
     }, duration);
 });

@@ -18,7 +18,6 @@ app.get("/game", async (req, res) => {
         return res.redirect("/");
     }
     if (!Game.findGameById(id)) {
-        res.render("gameloading");
         const game = new Game(id);
     }
     res.render("game", { id });
