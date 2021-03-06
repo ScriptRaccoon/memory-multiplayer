@@ -65,6 +65,7 @@ a:hover {
     height: 700px;
     margin: 0 auto;
     overflow: hidden;
+    transition: opacity 150ms ease-in-out;
 }
 
 /* cards */

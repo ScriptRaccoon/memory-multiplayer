@@ -31,7 +31,7 @@ class Game {
         this.cardWidth = 100;
         this.cardHeight = 140;
         this.cards = [];
-        this.canOpen = true;
+        this.canOpen = false;
         this.turn = 0;
         this.round = 1;
         this.lastMoveTime = null;
@@ -55,19 +55,6 @@ class Game {
         }
     }
 
-    restart() {
-        for (const card of this.cards) {
-            this.closeCard(card);
-        }
-        setTimeout(() => {
-            this.round++;
-            this.turn = this.round % 2 === 0 ? 1 : 0;
-            this.showScores();
-            this.showTurn();
-        }, 6 * this.turnDuration);
-        this.generateCards();
-    }
-
     start() {
         for (let i = 0; i < 2; i++) {
             io.to(this.players[i]).emit("gameStart", {
@@ -79,6 +66,22 @@ class Game {
         this.showTurn();
         this.lastMoveTime = new Date().getTime();
         setTimeout(() => this.removeWhenIdle(), oneHour);
+    }
+
+    async restart() {
+        for (const card of this.cards) {
+            this.closeCard(card);
+        }
+        for (const player of this.players) {
+            io.to(player).emit("gameOpacity", 0.5);
+        }
+        await this.generateCards();
+        for (const player of this.players) {
+            io.to(player).emit("gameOpacity", 1);
+        }
+        this.round++;
+        this.turn = this.round % 2 === 0 ? 1 : 0;
+        this.showTurn();
     }
 
     showTurn() {
@@ -101,6 +104,7 @@ class Game {
     }
 
     async generateCards() {
+        this.canOpen = false;
         this.pairedCards = 0;
         this.previousCard = null;
         this.cards = [];
@@ -124,13 +128,14 @@ class Game {
         for (let i = 0; i < this.cardAmount; i++) {
             this.cards[i] = { id: i, image: imageURLs[i], state: CARD_STATES.CLOSED };
         }
+
+        this.canOpen = true;
     }
 
     openCard(cardId) {
-        const card = this.cards[cardId];
-        if (!card) return;
-        if (card.state != CARD_STATES.CLOSED) return;
         if (!this.canOpen) return;
+        const card = this.cards[cardId];
+        if (!card || card.state != CARD_STATES.CLOSED) return;
         this.lastMoveTime = new Date().getTime();
         card.state = CARD_STATES.OPEN;
         for (const player of this.players) {
@@ -183,6 +188,7 @@ class Game {
 
     handleWin() {
         this.scores[this.turn]++;
+        this.showScores();
         const winner = this.players[this.turn];
         const loser = this.players[1 - this.turn];
         io.to(winner).emit("winMessage", "You won the round!");

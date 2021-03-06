@@ -85,3 +85,5 @@ socket.on("winMessage", (message) => {
 socket.on("scores", ({ round, scores }) => {
     $("#score").text(`Round ${round} / Score ${scores[playerIndex]}`);
 });
+
+socket.on("gameOpacity", (opacity) => $("#game").css("opacity", opacity));
