@@ -42,9 +42,9 @@ io.on("connect", (socket) => {
         if (!game) return;
         game.remove({ reason: "The other player has disconnected." });
     });
-    socket.on("openCard", ({ gameId, playerIndex, cardId }) => {
+    socket.on("openCard", ({ gameId, cardId }) => {
         const game = Game.findGameById(gameId);
-        if (game && game.turn === playerIndex) {
+        if (game && game.players[game.turn] === socket.id) {
             game.openCard(cardId);
         }
     });

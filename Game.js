@@ -91,9 +91,9 @@ class Game {
 
     showScores() {
         for (let i = 0; i < 2; i++) {
-            io.to(this.players[i]).emit("scores", {
+            io.to(this.players[i]).emit("score", {
                 round: this.round,
-                scores: this.scores,
+                score: this.scores[i],
             });
         }
     }

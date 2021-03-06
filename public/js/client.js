@@ -1,5 +1,3 @@
-let playerIndex = null;
-
 $("#status").html("Waiting for an opponent...").fadeIn();
 
 const socket = io();
@@ -25,16 +23,15 @@ function redirectHome() {
 
 $("#closeBtn").click(redirectHome);
 
-socket.on("gameStart", ({ index, cardAmount }) => {
+socket.on("gameStart", ({ cardAmount }) => {
     $(".header").addClass("duringGame");
-    playerIndex = index;
     for (let i = 0; i < cardAmount / 2; i++) {
         for (let j = 0; j < 2; j++) {
             const cardId = 2 * i + j;
             const card = $("<div></div>")
                 .attr("id", `card-${cardId}`)
                 .addClass("card")
-                .click(() => socket.emit("openCard", { gameId, playerIndex, cardId }))
+                .click(() => socket.emit("openCard", { gameId, cardId }))
                 .appendTo("#game")
                 .fadeIn();
             $("<div></div>").addClass("front").appendTo(card);
@@ -82,8 +79,8 @@ socket.on("winMessage", (message) => {
     $("#status").html(message);
 });
 
-socket.on("scores", ({ round, scores }) => {
-    $("#score").text(`Round ${round} / Score ${scores[playerIndex]}`);
+socket.on("score", ({ round, score }) => {
+    $("#score").text(`Round ${round} / Score ${score}`);
 });
 
 socket.on("gameOpacity", (opacity) => $("#game").css("opacity", opacity));
