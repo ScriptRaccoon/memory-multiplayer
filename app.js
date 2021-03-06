@@ -27,7 +27,9 @@ app.get("/game", async (req, res) => {
 io.on("connect", (socket) => {
     socket.on("gameId", (gameId) => {
         const game = Game.findGameById(gameId);
-        if (!game || game.players.length >= 2) {
+        if (!game) {
+            socket.emit("redirectHome", { reason: "This game does not exist." });
+        } else if (game.players.length >= 2) {
             socket.emit("redirectHome", { reason: "This game is already full." });
         } else {
             game.players.push(socket);
