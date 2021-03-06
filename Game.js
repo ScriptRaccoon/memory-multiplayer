@@ -187,7 +187,9 @@ class Game {
         this.showScores();
         this.currentPlayer.emit("message", "You won the round!");
         this.otherPlayer.emit("message", "You lost the round!");
-        this.restart();
+        setTimeout(() => {
+            this.restart();
+        }, 5 * this.turnDuration);
     }
 
     removeWhenIdle() {
