@@ -8,17 +8,17 @@ const { Game } = require("./Game.js");
 // start route
 app.get("/", (req, res) => {
     const id = shortid.generate();
-    res.render("welcome", { id });
+    res.render("home", { id });
 });
 
 // game route
-app.get("/game", async (req, res) => {
-    const id = req.query.id;
+app.get("/:id", async (req, res) => {
+    const id = req.params.id;
     if (!id) {
         return res.redirect("/");
     }
     if (!Game.findGameById(id)) {
-        const game = new Game(id);
+        new Game(id);
     }
     res.render("game", { id });
 });

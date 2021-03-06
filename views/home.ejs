@@ -28,7 +28,7 @@
             el.remove();
         }
         const id = "<%= id %>";  
-        const url = `${window.location}game?id=${id}`;
+        const url = `${window.location}${id}`;
         const link = document.getElementById("link");
         link.textContent = url;
         link.href = url;
