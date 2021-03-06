@@ -75,7 +75,7 @@ socket.on("closeCard", ({ cardId, duration }) => {
     }, duration);
 });
 
-socket.on("winMessage", (message) => {
+socket.on("message", (message) => {
     $("#status").html(message);
 });
 

@@ -1,6 +1,5 @@
 const fetch = require("node-fetch");
-
-// const { io } = require("./socket.js");
+const { io } = require("./socket");
 
 const games = [];
 
@@ -46,21 +45,27 @@ class Game {
         return games.find((game) => game.players.includes(socket));
     }
 
+    get currentPlayer() {
+        return this.players[this.turn];
+    }
+
+    get otherPlayer() {
+        return this.players[1 - this.turn];
+    }
+
     remove({ reason }) {
         const index = games.findIndex((game) => game.id === this.id);
         games.splice(index, 1);
-        for (const player of this.players) {
-            player.emit("redirectHome", { reason });
-        }
+        io.to(this.id).emit("redirectHome", { reason });
     }
 
     start() {
-        // todo: create room
         for (const player of this.players) {
-            player.emit("gameStart", {
-                cardAmount: this.cardAmount,
-            });
+            player.join(this.id);
         }
+        io.to(this.id).emit("gameStart", {
+            cardAmount: this.cardAmount,
+        });
         this.showScores();
         this.showTurn();
         this.lastMoveTime = new Date().getTime();
@@ -71,21 +76,17 @@ class Game {
         for (const card of this.cards) {
             this.closeCard(card);
         }
-        for (const player of this.players) {
-            player.emit("loading", true);
-        }
+        io.to(this.id).emit("loading", true);
         await this.generateCards();
-        for (const player of this.players) {
-            player.emit("loading", false);
-        }
+        io.to(this.id).emit("loading", false);
         this.round++;
         this.turn = this.round % 2 === 0 ? 1 : 0;
         this.showTurn();
     }
 
     showTurn() {
-        this.players[this.turn].emit("turn");
-        this.players[1 - this.turn].emit("noturn");
+        this.currentPlayer.emit("turn");
+        this.otherPlayer.emit("noturn");
     }
 
     showScores() {
@@ -137,13 +138,12 @@ class Game {
         if (!card || card.state != CARD_STATES.CLOSED) return;
         this.lastMoveTime = new Date().getTime();
         card.state = CARD_STATES.OPEN;
-        for (const player of this.players) {
-            player.emit("openCard", {
-                cardId: cardId,
-                image: card.image,
-                duration: this.turnDuration,
-            });
-        }
+        io.to(this.id).emit("openCard", {
+            cardId: cardId,
+            image: card.image,
+            duration: this.turnDuration,
+        });
+
         if (!this.previousCard) {
             this.previousCard = card;
         } else {
@@ -173,12 +173,10 @@ class Game {
 
     closeCard(card) {
         setTimeout(() => {
-            for (const player of this.players) {
-                player.emit("closeCard", {
-                    cardId: card.id,
-                    duration: this.turnDuration,
-                });
-            }
+            io.to(this.id).emit("closeCard", {
+                cardId: card.id,
+                duration: this.turnDuration,
+            });
         }, this.turnDuration * 4);
         setTimeout(() => {
             card.state = CARD_STATES.CLOSED;
@@ -188,10 +186,8 @@ class Game {
     handleWin() {
         this.scores[this.turn]++;
         this.showScores();
-        const winner = this.players[this.turn];
-        const loser = this.players[1 - this.turn];
-        winner.emit("winMessage", "You won the round!");
-        loser.emit("winMessage", "You lost the round!");
+        this.currentPlayer.emit("message", "You won the round!");
+        this.otherPlayer.emit("message", "You lost the round!");
         this.restart();
     }
 
