@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const { io } = require("./socket");
+const { shuffle, randInt } = require("./utils.js");
 
 const games = [];
 
@@ -10,13 +11,6 @@ const CARD_STATES = {
 };
 
 const oneHour = 1000 * 60 * 60;
-
-function shuffle(list) {
-    for (let i = list.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [list[i], list[j]] = [list[j], list[i]];
-    }
-}
 
 class Game {
     constructor(id) {
@@ -29,6 +23,7 @@ class Game {
         this.cardAmount = 16;
         this.cardWidth = 100;
         this.cardHeight = 140;
+        this.variation = 100;
         this.cards = [];
         this.canOpen = false;
         this.turn = 0;
@@ -111,9 +106,9 @@ class Game {
         const imageURLs = [];
         for (let i = 0; i < this.cardAmount / 2; i++) {
             try {
-                const response = await fetch(
-                    `https://unsplash.it/${this.cardWidth}/${this.cardHeight}`
-                );
+                const width = randInt(this.cardWidth, this.cardWidth + this.variation);
+                const height = randInt(this.cardHeight, this.cardHeight + this.variation);
+                const response = await fetch(`https://unsplash.it/${width}/${height}`);
                 const { url } = response;
                 imageURLs.push(url);
                 imageURLs.push(url);
