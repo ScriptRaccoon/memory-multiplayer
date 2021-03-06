@@ -31,20 +31,20 @@ io.on("connect", (socket) => {
         if (!game || game.players.length >= 2) {
             socket.emit("redirectHome", { reason: "This game is already full." });
         } else {
-            game.players.push(socket.id);
+            game.players.push(socket);
             if (game.players.length === 2) {
                 game.start();
             }
         }
     });
     socket.on("disconnect", () => {
-        const game = Game.findGameByPlayer(socket.id);
+        const game = Game.findGameByPlayer(socket);
         if (!game) return;
         game.remove({ reason: "The other player has disconnected." });
     });
     socket.on("openCard", ({ gameId, cardId }) => {
         const game = Game.findGameById(gameId);
-        if (game && game.players[game.turn] === socket.id) {
+        if (game && game.players[game.turn].id === socket.id) {
             game.openCard(cardId);
         }
     });
