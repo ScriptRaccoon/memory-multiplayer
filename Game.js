@@ -72,11 +72,11 @@ class Game {
             this.closeCard(card);
         }
         for (const player of this.players) {
-            player.emit("gameOpacity", 0.5);
+            player.emit("loading", true);
         }
         await this.generateCards();
         for (const player of this.players) {
-            player.emit("gameOpacity", 1);
+            player.emit("loading", false);
         }
         this.round++;
         this.turn = this.round % 2 === 0 ? 1 : 0;

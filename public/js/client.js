@@ -83,4 +83,11 @@ socket.on("score", ({ round, score }) => {
     $("#score").text(`Round ${round} / Score ${score}`);
 });
 
-socket.on("gameOpacity", (opacity) => $("#game").css("opacity", opacity));
+socket.on("loading", (loading) => {
+    if (loading) {
+        $("#status").html("Images are loaded...");
+        $("#game").css("opacity", 0.7);
+    } else {
+        $("#game").css("opacity", 1);
+    }
+});
