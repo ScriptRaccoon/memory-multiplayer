@@ -46,7 +46,7 @@ socket.on("turn", () => {
 
 socket.on("noturn", () => {
     $("#status").html("It's your opponent's turn");
-    $(".card").css("cursor", "not-allowed");
+    $(".card").css("cursor", "default");
 });
 
 socket.on("openCard", ({ cardId, image, duration }) => {
