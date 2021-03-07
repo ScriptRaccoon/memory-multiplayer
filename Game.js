@@ -1,16 +1,14 @@
 const fetch = require("node-fetch");
 const { io } = require("./socket");
-const { shuffle, randInt } = require("./utils.js");
+const { shuffle, randInt, oneHour } = require("./utils.js");
 
-const games = [];
+const GAME_LIST = [];
 
 const CARD_STATES = {
     OPEN: 0,
     CLOSED: 1,
     PAIRED: 2,
 };
-
-const oneHour = 1000 * 60 * 60;
 
 class Game {
     constructor(id) {
@@ -29,15 +27,15 @@ class Game {
         this.turn = 0;
         this.round = 1;
         this.lastMoveTime = null;
-        games.push(this);
+        GAME_LIST.push(this);
     }
 
     static findGameById(id) {
-        return games.find((game) => game.id === id);
+        return GAME_LIST.find((game) => game.id === id);
     }
 
     static findGameByPlayer(socket) {
-        return games.find((game) => game.players.includes(socket));
+        return GAME_LIST.find((game) => game.players.includes(socket));
     }
 
     get currentPlayer() {
@@ -49,8 +47,8 @@ class Game {
     }
 
     remove({ reason }) {
-        const index = games.findIndex((game) => game.id === this.id);
-        games.splice(index, 1);
+        const index = GAME_LIST.findIndex((game) => game.id === this.id);
+        GAME_LIST.splice(index, 1);
         io.to(this.id).emit("redirectHome", { reason });
     }
 
@@ -61,8 +59,8 @@ class Game {
         io.to(this.id).emit("gameStart", {
             cardAmount: this.cardAmount,
         });
-        await this.generateCards();
         this.showScores();
+        await this.generateCards();
         this.showTurn();
         this.lastMoveTime = new Date().getTime();
         setTimeout(() => this.removeWhenIdle(), oneHour);
@@ -79,8 +77,8 @@ class Game {
     }
 
     showTurn() {
-        this.currentPlayer.emit("turn");
-        this.otherPlayer.emit("noturn");
+        this.currentPlayer.emit("turn", true);
+        this.otherPlayer.emit("turn", false);
     }
 
     showScores() {
@@ -98,7 +96,6 @@ class Game {
     }
 
     async generateCards() {
-        console.log("loading...");
         io.to(this.id).emit("loading", true);
         this.canOpen = false;
         this.pairedCards = 0;
@@ -130,7 +127,6 @@ class Game {
 
         this.canOpen = true;
         io.to(this.id).emit("loading", false);
-        console.log("loading done");
     }
 
     openCard(cardId) {

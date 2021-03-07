@@ -12,15 +12,15 @@ app.get("/", (req, res) => {
 });
 
 // game route
-app.get("/:id", async (req, res) => {
-    const id = req.params.id;
-    if (!id) {
+app.get("/:gameId", async (req, res) => {
+    const gameId = req.params.gameId;
+    if (!gameId) {
         return res.redirect("/");
     }
-    if (!Game.findGameById(id)) {
-        new Game(id);
+    if (!Game.findGameById(gameId)) {
+        new Game(gameId);
     }
-    res.render("game", { id });
+    res.render("game", { gameId });
 });
 
 // socket connection

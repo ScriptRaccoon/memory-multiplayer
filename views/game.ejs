@@ -6,19 +6,14 @@
 </header>
 
 <main>    
-    <div id="score">
-    </div>
-    <div id="status">
-    </div>
-    
-    <section class="game" id="game">
-    </section>    
+    <div id="score"></div>
+    <div id="status"></div>    
+    <section class="game" id="game"></section>    
 </main>
  
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script>const gameId = "<%= id %>";</script>
+<script>const gameId = "<%= gameId %>";</script>
 <script src="./js/client.js"></script>
-
 
 <%- include("footer")  %>

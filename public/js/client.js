@@ -24,29 +24,26 @@ function redirectHome() {
 $("#closeBtn").click(redirectHome);
 
 socket.on("gameStart", ({ cardAmount }) => {
-    for (let i = 0; i < cardAmount / 2; i++) {
-        for (let j = 0; j < 2; j++) {
-            const cardId = 2 * i + j;
-            const card = $("<div></div>")
-                .attr("id", `card-${cardId}`)
-                .addClass("card")
-                .click(() => socket.emit("openCard", { gameId, cardId }))
-                .appendTo("#game")
-                .fadeIn();
-            $("<div></div>").addClass("front").appendTo(card);
-            $("<div></div>").addClass("back").appendTo(card);
-        }
+    for (let cardId = 0; cardId < cardAmount; cardId++) {
+        const card = $("<div></div>")
+            .attr("id", `card-${cardId}`)
+            .addClass("card")
+            .click(() => socket.emit("openCard", { gameId, cardId }))
+            .appendTo("#game")
+            .fadeIn();
+        $("<div></div>").addClass("front").appendTo(card);
+        $("<div></div>").addClass("back").appendTo(card);
     }
 });
 
-socket.on("turn", () => {
-    $("#status").html("It's your turn");
-    $(".card").css("cursor", "pointer");
-});
-
-socket.on("noturn", () => {
-    $("#status").html("It's your opponent's turn");
-    $(".card").css("cursor", "default");
+socket.on("turn", (isMyTurn) => {
+    if (isMyTurn) {
+        $("#status").html("It's your turn");
+        $(".card").css("cursor", "pointer");
+    } else {
+        $("#status").html("It's your opponent's turn");
+        $(".card").css("cursor", "default");
+    }
 });
 
 socket.on("openCard", ({ cardId, image, duration }) => {
@@ -87,7 +84,7 @@ socket.on("score", ({ round, score }) => {
 socket.on("loading", (loading) => {
     if (loading) {
         $("#status").html("Images are loading...");
-        $("#game").css("opacity", 0.7);
+        $("#game").css("opacity", 0.4);
     } else {
         $("#game").css("opacity", 1);
     }
