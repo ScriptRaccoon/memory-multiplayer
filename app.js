@@ -19,7 +19,11 @@ app.get("/:gameId", async (req, res) => {
     if (!gameId || !cardAmount || !isValidAmount) {
         return res.redirect("/");
     }
-    if (!Game.findGameById(gameId)) {
+    const game = Game.findGameById(gameId);
+    if (game && game.cardAmount != cardAmount) {
+        return res.redirect("/");
+    }
+    if (!game) {
         new Game(gameId, cardAmount);
     }
     res.render("game", { gameId });
