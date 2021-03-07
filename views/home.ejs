@@ -14,33 +14,13 @@
         <p>
             Share that link with someone to play with. Have fun!
         </p>
+        <p>
+            Change the card amount: <input id="amountInput" type="number" value="16" min="2" step="2" max="42">
+        </p>
     </section>
 
-    <script>
-        function copyStringToClipboard(str) {
-            const el = document.createElement("textarea");
-            el.style.opacity = 0;
-            el.value = str;
-            el.setAttribute("readonly", "");
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand("copy");
-            el.remove();
-        }
-        const id = "<%= id %>";  
-        const url = `${window.location}${id}`;
-        const link = document.getElementById("link");
-        link.textContent = url;
-        link.href = url;
-        const copyBtn = document.getElementById("copyBtn");
-        copyBtn.addEventListener("click", () => {
-            copyStringToClipboard(url);
-            copyBtn.classList.add("clicked");
-            setTimeout(() => {
-                copyBtn.classList.remove("clicked");
-            },200);
-        });
-
-    </script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script>const id = "<%= id %>";</script>
+    <script src="./js/home.js"></script>
 
     <%- include("./footer.ejs")  %> 
