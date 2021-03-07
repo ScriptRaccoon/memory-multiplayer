@@ -17,7 +17,7 @@ socket.on("redirectHome", ({ reason }) => {
 
 function redirectHome() {
     const url = window.location;
-    const baseURL = url.protocol + "//" + url.host + "/" + url.pathname.split("/")[1];
+    const baseURL = url.protocol + "//" + url.host;
     window.location.href = baseURL;
 }
 
