@@ -1,19 +1,33 @@
-let cardAmount = $("#amountInput").val();
-let url = `${window.location}${id}?n=${cardAmount}`;
+let cardAmount = 16;
+let url;
+updateLink();
 
-$("#link").text(url).attr("href", url);
+$("#plusBtn").click(() => {
+    cardAmount += 2;
+    updateLink();
+});
 
-$("#amountInput").change(() => {
-    cardAmount = $("#amountInput").val();
+$("#minusBtn").click(() => {
+    if (cardAmount >= 4) {
+        cardAmount -= 2;
+        updateLink();
+    }
+});
+
+function updateLink() {
+    $("#amountDisplay").text(cardAmount);
     url = `${window.location}${id}?n=${cardAmount}`;
     $("#link").text(url).attr("href", url);
-});
+}
 
 $("#copyBtn").click(() => {
     copyStringToClipboard(url);
-    $("#copyBtn").addClass("clicked");
+});
+
+$(".welcome i").click(function () {
+    $(this).addClass("clicked");
     setTimeout(() => {
-        $("#copyBtn").removeClass("clicked");
+        $(this).removeClass("clicked");
     }, 200);
 });
 

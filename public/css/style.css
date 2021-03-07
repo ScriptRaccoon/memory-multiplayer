@@ -51,10 +51,38 @@ a:hover {
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
+    padding: 0px 10px;
 }
 
-.linkContainer {
-    margin-top: 20px;
+.welcome p {
+    margin: 10px 0px;
+}
+
+.welcome i {
+    margin: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    display: inline-block;
+}
+
+.welcome i:hover {
+    color: var(--link-hover-color);
+}
+
+.welcome i.clicked {
+    animation: shrink 160ms linear;
+}
+
+@keyframes shrink {
+    0% {
+        transform: scale(1) translateY(0px);
+    }
+    20% {
+        transform: scale(0.7) translateY(-2px);
+    }
+    100% {
+        transform: scale(1) translateY(0px);
+    }
 }
 
 /* game section */
@@ -162,38 +190,6 @@ a:hover {
 
 #controls > i:hover {
     opacity: 1;
-}
-
-/* copy btn */
-
-#copyBtn {
-    color: var(--link-color);
-    font-size: 20px;
-    margin: 10px;
-    cursor: pointer;
-}
-
-#copyBtn:hover {
-    color: var(--link-hover-color);
-}
-
-#copyBtn.clicked {
-    animation: shrink 200ms ease-in-out;
-}
-
-@keyframes shrink {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    30% {
-        transform: scale(0.6);
-        opacity: 0.5;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
 }
 
 /* media queries */

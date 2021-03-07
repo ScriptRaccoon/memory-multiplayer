@@ -7,15 +7,18 @@
         <p>Your memory game link is</p>
         <p class="linkContainer">
             <a title="game url" id="link" href="#"></a>
-        </p>
-        <p>
+            <br>
             <i id="copyBtn" title="copy url to clipboard" class="far fa-clipboard"></i>
         </p>
         <p>
             Share that link with someone to play with. Have fun!
         </p>
         <p>
-            Change the card amount: <input id="amountInput" type="number" value="16" min="2" step="2" max="42">
+            <i title="decrease card amount" id="minusBtn" class="fas fa-minus"></i>
+            <span>
+                <span id="amountDisplay"></span> Cards
+            </span>            
+            <i title="increase card amount" id="plusBtn" class="fas fa-plus"></i>
         </p>
     </section>
 
