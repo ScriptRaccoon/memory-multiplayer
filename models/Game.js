@@ -26,6 +26,7 @@ class Game {
         this.turn = 0;
         this.round = 1;
         this.lastMoveTime = null;
+        this.roundScore = [0, 0];
     }
 
     get currentPlayer() {
@@ -51,6 +52,7 @@ class Game {
         }
         await this.generateCards();
         this.round++;
+        this.roundScore = [0, 0];
         this.turn = this.round % 2 === 0 ? 1 : 0;
         this.showScores();
         this.showTurn();
@@ -136,8 +138,9 @@ class Game {
             cardB.status = CARD_STATES.PAIRED;
             this.pairedCards += 2;
             this.canOpen = true;
+            this.roundScore[this.turn]++;
             if (this.pairedCards == this.cardAmount) {
-                this.handleWin();
+                this.handleEnd();
             }
         } else {
             await sleep(turnDuration * 2);
@@ -157,10 +160,20 @@ class Game {
         });
     }
 
-    handleWin() {
-        this.scores[this.turn]++;
-        this.currentPlayer.emit("message", "You won the round! 😀");
-        this.otherPlayer.emit("message", "You lost the round! 😔");
+    handleEnd() {
+        if (this.roundScore[0] === this.roundScore[1]) {
+            io.to(this.id).emit("message", "Both won the round! 😀");
+            this.scores[0]++;
+            this.scores[1]++;
+        } else if (this.roundScore[0] > this.roundScore[1]) {
+            this.scores[0]++;
+            this.players[0].emit("message", "You won the round! 😀");
+            this.players[1].emit("message", "You lost the round! 😔");
+        } else {
+            this.scores[1]++;
+            this.players[0].emit("message", "You lost the round! 😔");
+            this.players[1].emit("message", "You won the round! 😀");
+        }
         setTimeout(() => {
             this.restart();
         }, 3000);
