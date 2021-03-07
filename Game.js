@@ -30,7 +30,6 @@ class Game {
         this.round = 1;
         this.lastMoveTime = null;
         games.push(this);
-        this.generateCards();
     }
 
     static findGameById(id) {
@@ -55,13 +54,14 @@ class Game {
         io.to(this.id).emit("redirectHome", { reason });
     }
 
-    start() {
+    async start() {
         for (const player of this.players) {
             player.join(this.id);
         }
         io.to(this.id).emit("gameStart", {
             cardAmount: this.cardAmount,
         });
+        await this.generateCards();
         this.showScores();
         this.showTurn();
         this.lastMoveTime = new Date().getTime();
@@ -98,6 +98,7 @@ class Game {
     }
 
     async generateCards() {
+        console.log("loading...");
         io.to(this.id).emit("loading", true);
         this.canOpen = false;
         this.pairedCards = 0;
@@ -129,6 +130,7 @@ class Game {
 
         this.canOpen = true;
         io.to(this.id).emit("loading", false);
+        console.log("loading done");
     }
 
     openCard(cardId) {
