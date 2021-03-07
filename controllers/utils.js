@@ -9,4 +9,8 @@ function randInt(a, b) {
     return a + Math.floor((b - a) * Math.random());
 }
 
-module.exports = { shuffle, randInt };
+async function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+module.exports = { shuffle, randInt, sleep };
