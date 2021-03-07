@@ -9,6 +9,4 @@ function randInt(a, b) {
     return a + Math.floor((b - a) * Math.random());
 }
 
-const oneHour = 1000 * 60 * 60;
-
-module.exports = { shuffle, randInt, oneHour };
+module.exports = { shuffle, randInt };

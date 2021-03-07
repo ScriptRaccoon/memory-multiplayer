@@ -87,7 +87,7 @@ a:hover {
 
 /* game section */
 
-.game {
+#game {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -95,7 +95,7 @@ a:hover {
     width: 500px;
     margin: 0 auto;
     overflow: hidden;
-    transition: opacity 150ms ease-in-out;
+    transition: opacity 250ms linear;
 }
 
 /* cards */
@@ -195,13 +195,13 @@ a:hover {
 /* media queries */
 
 @media (max-height: 800px) and (min-width: 1000px) {
-    .game {
+    #game {
         width: 1000px;
     }
 }
 
 @media (max-width: 500px) {
-    .game {
+    #game {
         padding-top: 20px;
         width: 280px;
     }

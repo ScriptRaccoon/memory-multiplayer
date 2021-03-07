@@ -1,8 +1,6 @@
 const fetch = require("node-fetch");
-const { io } = require("./socket");
-const { shuffle, randInt, oneHour } = require("./utils.js");
-
-const GAME_LIST = [];
+const { io } = require("../server.js");
+const { shuffle, randInt } = require("../controllers/utils.js");
 
 const CARD_STATES = {
     OPEN: 0,
@@ -11,7 +9,7 @@ const CARD_STATES = {
 };
 
 class Game {
-    constructor(id, cardAmount) {
+    constructor({ id, cardAmount }) {
         this.id = id;
         this.cardAmount = cardAmount;
         this.players = [];
@@ -27,15 +25,6 @@ class Game {
         this.turn = 0;
         this.round = 1;
         this.lastMoveTime = null;
-        GAME_LIST.push(this);
-    }
-
-    static findGameById(id) {
-        return GAME_LIST.find((game) => game.id === id);
-    }
-
-    static findGameByPlayer(socket) {
-        return GAME_LIST.find((game) => game.players.includes(socket));
     }
 
     get currentPlayer() {
@@ -46,24 +35,13 @@ class Game {
         return this.players[1 - this.turn];
     }
 
-    remove({ reason }) {
-        const index = GAME_LIST.findIndex((game) => game.id === this.id);
-        GAME_LIST.splice(index, 1);
-        io.to(this.id).emit("redirectHome", { reason });
-    }
-
     async start() {
         for (const player of this.players) {
             player.join(this.id);
         }
-        io.to(this.id).emit("gameStart", {
-            cardAmount: this.cardAmount,
-        });
-        this.showScores();
         await this.generateCards();
         this.showTurn();
         this.lastMoveTime = new Date().getTime();
-        setTimeout(() => this.removeWhenIdle(), oneHour);
     }
 
     async restart() {
@@ -188,15 +166,6 @@ class Game {
         setTimeout(() => {
             this.restart();
         }, 5 * this.turnDuration);
-    }
-
-    removeWhenIdle() {
-        const currentTime = new Date().getTime();
-        if (currentTime - this.lastMoveTime > oneHour) {
-            this.remove({ reason: "This game has been detected as idle." });
-        } else {
-            setTimeout(() => this.removeWhenIdle(), oneHour);
-        }
     }
 }
 
