@@ -52,6 +52,7 @@ class Game {
         await this.generateCards();
         this.round++;
         this.turn = this.round % 2 === 0 ? 1 : 0;
+        this.showScores();
         this.showTurn();
     }
 
@@ -158,7 +159,6 @@ class Game {
 
     handleWin() {
         this.scores[this.turn]++;
-        this.showScores();
         this.currentPlayer.emit("message", "You won the round!");
         this.otherPlayer.emit("message", "You lost the round!");
         setTimeout(() => {
