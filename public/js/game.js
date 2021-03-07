@@ -67,7 +67,10 @@ socket.on("closeCard", ({ cardId, duration }) => {
     }, duration);
 });
 
-socket.on("message", (msg) => $("#status").html(msg));
+socket.on("message", (msg) => {
+    $("#status").css("fontSize", "30px").html(msg);
+    setTimeout(() => $("#status").css("fontSize", "18px"), 2800);
+});
 
 socket.on("score", ({ round, score }) =>
     $("#score").text(`Round ${round} / Score ${score}`)

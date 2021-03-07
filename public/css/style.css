@@ -177,9 +177,11 @@ a:hover {
 /* status and score  */
 
 #status {
+    overflow: hidden;
     display: none;
     text-align: center;
     margin-bottom: 20px;
+    transition: font-size 200ms linear;
 }
 
 #score {

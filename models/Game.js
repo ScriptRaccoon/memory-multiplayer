@@ -159,11 +159,11 @@ class Game {
 
     handleWin() {
         this.scores[this.turn]++;
-        this.currentPlayer.emit("message", "You won the round!");
-        this.otherPlayer.emit("message", "You lost the round!");
+        this.currentPlayer.emit("message", "You won the round! 😀");
+        this.otherPlayer.emit("message", "You lost the round! 😔");
         setTimeout(() => {
             this.restart();
-        }, 1000);
+        }, 3000);
     }
 }
 
