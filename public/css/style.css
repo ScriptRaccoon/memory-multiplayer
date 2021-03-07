@@ -7,7 +7,10 @@
     --card-shadow-color: rgba(255, 255, 255, 0.3);
     --card-border-color: white;
     --background-color: #111115;
+    --outline-color: #1b1b1f;
+    --outline-hover-color: #404053;
     --font-color: #eee;
+    --scale: 1;
 }
 
 *,
@@ -88,22 +91,34 @@ a:hover {
 /* game section */
 
 #game {
+    border: 1px solid var(--outline-color);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: flex-start;
-    width: 500px;
+    align-content: flex-start;
+    width: 510px;
+    padding: 10px;
     margin: 0 auto;
-    overflow: hidden;
     transition: opacity 250ms linear;
+    resize: both;
+    overflow: auto;
+    min-width: 140px;
+    min-height: 170px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+#game:hover {
+    border: 1px solid var(--outline-hover-color);
 }
 
 /* cards */
 
 .card {
-    margin: 10px;
-    width: 100px;
-    height: 140px;
+    margin: calc(var(--scale) * 10px);
+    width: calc(var(--scale) * 100px);
+    height: calc(var(--scale) * 140px);
     text-align: center;
     position: relative;
     display: none;
@@ -113,10 +128,10 @@ a:hover {
     width: 100%;
     height: 100%;
     position: absolute;
-    border-radius: 10px;
+    border-radius: calc(var(--scale) * 10px);
     background-position: center;
     background-size: cover;
-    box-shadow: 0px 0px 10px var(--card-shadow-color);
+    box-shadow: 0px 0px calc(var(--scale) * 10px) var(--card-shadow-color);
     z-index: 0;
 }
 
@@ -125,20 +140,20 @@ a:hover {
     width: 100%;
     height: 100%;
     position: absolute;
-    border-radius: 10px;
+    border-radius: calc(var(--scale) * 10px);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 10px var(--card-shadow-color);
+    box-shadow: 0px 0px calc(var(--scale) * 10px) var(--card-shadow-color);
     z-index: 1;
 }
 
 .back::before {
     content: "";
-    width: 90px;
-    height: 130px;
+    width: calc(var(--scale) * 90px);
+    height: calc(var(--scale) * 130px);
     background-color: var(--card-inner-color);
-    border-radius: 6px;
+    border-radius: calc(var(--scale) * 10px);
 }
 
 /* card animation */
@@ -194,24 +209,12 @@ a:hover {
 
 /* media queries */
 
-@media (max-height: 800px) and (min-width: 1000px) {
-    #game {
-        width: 1000px;
+@media (max-width: 510px) {
+    :root {
+        --scale: 0.5;
     }
-}
-
-@media (max-width: 500px) {
     #game {
         padding-top: 20px;
         width: 280px;
-    }
-    .card {
-        width: 50px;
-        height: 70px;
-        margin: 5px;
-    }
-    .back::before {
-        width: 45px;
-        height: 65px;
     }
 }
