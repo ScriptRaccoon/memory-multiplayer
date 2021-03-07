@@ -14,11 +14,13 @@ app.get("/", (req, res) => {
 // game route
 app.get("/:gameId", async (req, res) => {
     const gameId = req.params.gameId;
-    if (!gameId) {
+    const cardAmount = parseInt(req.query.n);
+    const isValidAmount = cardAmount >= 2 && cardAmount % 2 == 0;
+    if (!gameId || !cardAmount || !isValidAmount) {
         return res.redirect("/");
     }
     if (!Game.findGameById(gameId)) {
-        new Game(gameId);
+        new Game(gameId, cardAmount);
     }
     res.render("game", { gameId });
 });

@@ -11,14 +11,14 @@ const CARD_STATES = {
 };
 
 class Game {
-    constructor(id) {
+    constructor(id, cardAmount) {
         this.id = id;
+        this.cardAmount = cardAmount;
         this.players = [];
         this.scores = [0, 0];
         this.pairedCards = 0;
         this.previousCard = null;
         this.turnDuration = 250;
-        this.cardAmount = 16;
         this.cardWidth = 100;
         this.cardHeight = 140;
         this.variation = 100;
