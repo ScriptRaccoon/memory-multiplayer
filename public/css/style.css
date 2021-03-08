@@ -65,6 +65,7 @@ a:hover {
     cursor: pointer;
     font-size: 20px;
     display: inline-block;
+    color: var(--link-color);
 }
 
 .welcome i:hover {

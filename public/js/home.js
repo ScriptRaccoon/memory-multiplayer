@@ -1,22 +1,36 @@
 let cardAmount = 16;
+let roundAmount = 10;
 let url;
-updateLink();
+updateDisplay();
 
-$("#plusBtn").click(() => {
+$("#plusCardBtn").click(() => {
     cardAmount += 2;
-    updateLink();
+    updateDisplay();
 });
 
-$("#minusBtn").click(() => {
+$("#minusCardBtn").click(() => {
     if (cardAmount >= 4) {
         cardAmount -= 2;
-        updateLink();
+        updateDisplay();
     }
 });
 
-function updateLink() {
+$("#plusRoundBtn").click(() => {
+    roundAmount += 1;
+    updateDisplay();
+});
+
+$("#minusRoundBtn").click(() => {
+    if (roundAmount >= 2) {
+        roundAmount--;
+        updateDisplay();
+    }
+});
+
+function updateDisplay() {
     $("#amountDisplay").text(cardAmount);
-    url = `${window.location}${id}?n=${cardAmount}`;
+    $("#roundDisplay").text(roundAmount);
+    url = `${window.location}${id}?n=${cardAmount}&r=${roundAmount}`;
     $("#link").text(url).attr("href", url);
 }
 
