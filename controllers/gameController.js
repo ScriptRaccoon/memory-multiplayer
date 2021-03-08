@@ -3,18 +3,19 @@ const { GAME_LIST } = require("../models/GameList.js");
 function joinGame(req, res) {
     const gameId = req.params.gameId;
     const cardAmount = parseInt(req.query.n);
-    const isValidAmount = cardAmount >= 2 && cardAmount % 2 == 0;
+    const roundAmount = parseInt(req.query.r);
+    const isValidAmount = cardAmount >= 2 && cardAmount % 2 == 0 && roundAmount >= 1;
     if (!gameId || !cardAmount || !isValidAmount) {
         return res.redirect("/");
     }
     const game = GAME_LIST.findGameById(gameId);
-    if (game && game.cardAmount != cardAmount) {
+    if (game && (game.cardAmount != cardAmount || game.roundAmount != roundAmount)) {
         return res.redirect("/");
     }
     if (!game) {
-        GAME_LIST.addGame({ id: gameId, cardAmount });
+        GAME_LIST.addGame({ id: gameId, cardAmount, roundAmount });
     }
-    res.render("game", { gameId, cardAmount });
+    res.render("game", { gameId, cardAmount, roundAmount });
 }
 
 function startGame(socket, gameId) {

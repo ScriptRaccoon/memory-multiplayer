@@ -14,9 +14,10 @@ const cardHeight = 140;
 const variation = 100;
 
 class Game {
-    constructor({ id, cardAmount }) {
+    constructor({ id, cardAmount, roundAmount }) {
         this.id = id;
         this.cardAmount = cardAmount;
+        this.roundAmount = roundAmount;
         this.players = [];
         this.scores = [0, 0];
         this.pairedCards = 0;
@@ -140,7 +141,7 @@ class Game {
             this.canOpen = true;
             this.roundScore[this.turn]++;
             if (this.pairedCards == this.cardAmount) {
-                this.handleEnd();
+                this.finishRound();
             }
         } else {
             await sleep(turnDuration * 2);
@@ -160,7 +161,7 @@ class Game {
         });
     }
 
-    handleEnd() {
+    finishRound() {
         if (this.roundScore[0] === this.roundScore[1]) {
             io.to(this.id).emit("message", "Both won the round! 😀");
             this.scores[0]++;
@@ -175,9 +176,11 @@ class Game {
             this.players[1].emit("message", "You won the round! 😀");
         }
         this.showScores();
-        setTimeout(() => {
-            this.restart();
-        }, 5000);
+        if (this.round < this.roundAmount) {
+            setTimeout(() => {
+                this.restart();
+            }, 5000);
+        }
     }
 }
 
