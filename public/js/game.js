@@ -78,9 +78,19 @@ socket.on("score", ({ round, score }) =>
 
 socket.on("loading", (loading) => {
     if (loading) {
-        $("#status").html("Images are loading...");
         $("#game").css("opacity", 0.4);
     } else {
         $("#game").css("opacity", 1);
     }
+});
+
+if (localStorage.getItem("resizeModal") == 0) {
+    $("#resizeModal").remove();
+} else {
+    $("#resizeModal").show();
+}
+
+$("#closeModal").click(() => {
+    $("#resizeModal").slideUp("fast");
+    localStorage.setItem("resizeModal", 0);
 });
