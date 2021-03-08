@@ -179,10 +179,39 @@ a:hover {
     transition: font-size 200ms linear;
 }
 
-#score_round {
+#scoreBoard {
+    max-width: 300px;
+    margin: 0 auto;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#scoreBoard .name {
+    font-size: 12px;
+    opacity: 0.5;
+    text-align: center;
+}
+
+#scoreBoard .name:hover {
+    opacity: 1;
+}
+
+#scoreBoard .score {
+    font-family: "Courier New", Courier, monospace;
+    border-radius: 4px;
+    width: 70px;
+    height: 35px;
+}
+
+#myScore {
+    border: 1px solid var(--link-color);
+}
+
+#theirScore {
+    border: 1px solid var(--card-inner-color);
 }
 
 /* controls */

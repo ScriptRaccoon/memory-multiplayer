@@ -51,10 +51,9 @@ class Game {
             this.closeCard(card);
         }
         await this.generateCards();
-
+        this.round++;
         this.roundScore = [0, 0];
         this.turn = this.round % 2 === 0 ? 1 : 0;
-        this.round++;
         this.showRound();
         this.showTurn();
     }
@@ -64,14 +63,13 @@ class Game {
         this.otherPlayer.emit("turn", false);
     }
 
-    showScores() {
-        for (let i = 0; i < 2; i++) {
-            this.players[i].emit("score", this.scores[i]);
-        }
-    }
-
     showRound() {
         io.to(this.id).emit("round", this.round);
+    }
+
+    showScores() {
+        this.players[0].emit("scores", this.scores);
+        this.players[1].emit("scores", [this.scores[1], this.scores[0]]);
     }
 
     changeTurns() {

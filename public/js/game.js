@@ -69,10 +69,13 @@ socket.on("closeCard", ({ cardId, duration }) => {
 
 socket.on("message", (msg) => {
     $("#status").css("fontSize", "30px").html(msg);
-    setTimeout(() => $("#status").css("fontSize", "18px"), 5000);
+    setTimeout(() => $("#status").css("fontSize", "18px"), 4500);
 });
 
-socket.on("score", (score) => $("#score").text(score));
+socket.on("scores", (scores) => {
+    $("#myScore").text(scores[0]);
+    $("#theirScore").text(scores[1]);
+});
 
 socket.on("round", (round) => $("#round").text(round));
 
