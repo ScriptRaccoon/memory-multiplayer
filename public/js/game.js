@@ -86,11 +86,13 @@ socket.on("loading", (loading) => {
 
 if (localStorage.getItem("resizeModal") == 0) {
     $("#resizeModal").remove();
+    $("#game").css("border-color", "var(--outline-color)");
 } else {
     $("#resizeModal").show();
 }
 
 $("#closeModal").click(() => {
     $("#resizeModal").slideUp("fast");
+    $("#game").css("border-color", "var(--outline-color)");
     localStorage.setItem("resizeModal", 0);
 });

@@ -90,7 +90,7 @@ a:hover {
 /* game section */
 
 #game {
-    border: 1px solid var(--outline-color);
+    border: 1px solid var(--font-color);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -213,7 +213,7 @@ a:hover {
     padding: 20px;
     border-radius: 5px;
     text-align: center;
-    border: 1px solid var(--outline-color);
+    border: 1px solid var(--font-color);
     position: relative;
 }
 
