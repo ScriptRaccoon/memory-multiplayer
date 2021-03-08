@@ -179,7 +179,7 @@ a:hover {
     transition: font-size 200ms linear;
 }
 
-#score {
+#score_round {
     text-align: center;
     margin-bottom: 20px;
     font-size: 24px;
