@@ -163,23 +163,37 @@ class Game {
 
     finishRound() {
         if (this.roundScore[0] === this.roundScore[1]) {
-            io.to(this.id).emit("message", "Both won the round! 😀");
+            io.to(this.id).emit("message", "The round is drawn! 🤝");
             this.scores[0]++;
             this.scores[1]++;
         } else if (this.roundScore[0] > this.roundScore[1]) {
             this.scores[0]++;
             this.players[0].emit("message", "You won the round! 😀");
-            this.players[1].emit("message", "You lost the round! 😔");
+            this.players[1].emit("message", "You lost the round! 😕");
         } else {
             this.scores[1]++;
-            this.players[0].emit("message", "You lost the round! 😔");
+            this.players[0].emit("message", "You lost the round! 😕");
             this.players[1].emit("message", "You won the round! 😀");
         }
         this.showScores();
-        if (this.round < this.roundAmount) {
-            setTimeout(() => {
+        setTimeout(() => {
+            if (this.round < this.roundAmount) {
                 this.restart();
-            }, 5000);
+            } else {
+                this.finishGame();
+            }
+        }, 5000);
+    }
+
+    finishGame() {
+        if (this.scores[0] === this.scores[1]) {
+            io.to(this.id).emit("message", "The game is drawn! 🤝");
+        } else if (this.scores[0] > this.scores[1]) {
+            this.players[0].emit("message", "You won the game! 🎉");
+            this.players[1].emit("message", "You lost the game! 😔");
+        } else {
+            this.players[0].emit("message", "You lost the game! 😔");
+            this.players[1].emit("message", "You won the game! 🎉");
         }
     }
 }
