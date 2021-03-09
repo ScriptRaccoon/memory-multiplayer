@@ -46,6 +46,7 @@ class Game {
     addViewer(socket) {
         socket.join(this.id);
         socket.join(this.id + "view");
+        socket.emit("round", this.round);
         socket.emit("scores", this.scores);
         socket.emit("turnIndex", this.turn);
         socket.emit("viewMode");
