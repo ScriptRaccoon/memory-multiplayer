@@ -19,7 +19,6 @@ class Game {
         this.cardAmount = cardAmount;
         this.roundAmount = roundAmount;
         this.players = [];
-        this.viewers = [];
         this.scores = [0, 0];
         this.pairedCards = 0;
         this.previousCard = null;
@@ -45,7 +44,6 @@ class Game {
     }
 
     addViewer(socket) {
-        this.viewers.push(socket);
         socket.join(this.id);
         socket.join(this.id + "view");
         socket.emit("scores", this.scores);
