@@ -1,3 +1,5 @@
+let myIndex;
+
 $(() => {
     $("#status").html("Waiting for an opponent...").fadeIn();
     for (let cardId = 0; cardId < cardAmount; cardId++) {
@@ -18,8 +20,15 @@ socket.on("connect", () => {
     socket.emit("gameId", gameId);
 });
 
+socket.on("index", (index) => {
+    myIndex = index;
+    $(`#player${index}`).text(`You`);
+    $(`#score${index}`).addClass("myScore");
+    $(`#player${1 - index}`).text(`Opponent`);
+});
+
 socket.on("redirectHome", ({ reason }) => {
-    $("#game, #score").hide();
+    $("#game, #scoreBoard").hide();
     $("#status").html(`${reason}<br><br>
     You will now be redirected to the main page.`);
     setTimeout(redirectHome, 3000);
@@ -73,8 +82,8 @@ socket.on("message", (msg) => {
 });
 
 socket.on("scores", (scores) => {
-    $("#myScore").text(scores[0]);
-    $("#theirScore").text(scores[1]);
+    $("#score0").text(scores[0]);
+    $("#score1").text(scores[1]);
 });
 
 socket.on("round", (round) => $("#round").text(round));
@@ -98,4 +107,8 @@ $("#closeModal").click(() => {
     $("#resizeModal").slideUp("fast");
     $("#game").css("border-color", "var(--outline-color)");
     localStorage.setItem("resizeModal", 0);
+});
+
+socket.on("viewer", () => {
+    $("#status").text("You are viewing the game.");
 });

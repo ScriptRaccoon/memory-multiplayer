@@ -19,6 +19,7 @@ class Game {
         this.cardAmount = cardAmount;
         this.roundAmount = roundAmount;
         this.players = [];
+        this.viewers = [];
         this.scores = [0, 0];
         this.pairedCards = 0;
         this.previousCard = null;
@@ -36,6 +37,18 @@ class Game {
 
     get otherPlayer() {
         return this.players[1 - this.turn];
+    }
+
+    addPlayer(socket) {
+        socket.emit("index", this.players.length);
+        this.players.push(socket);
+    }
+
+    addViewer(socket) {
+        this.viewers.push(socket);
+        socket.join(this.id);
+        socket.emit("scores", this.scores);
+        socket.emit("viewer");
     }
 
     async start() {
@@ -69,8 +82,7 @@ class Game {
     }
 
     showScores() {
-        this.players[0].emit("scores", this.scores);
-        this.players[1].emit("scores", [this.scores[1], this.scores[0]]);
+        io.to(this.id).emit("scores", this.scores);
     }
 
     changeTurns() {

@@ -205,14 +205,11 @@ a:hover {
     border-radius: 4px;
     width: 70px;
     height: 35px;
-}
-
-#myScore {
-    border: 1px solid var(--link-color);
-}
-
-#theirScore {
     border: 1px solid var(--card-inner-color);
+}
+
+.myScore {
+    border: 1px solid var(--link-color) !important;
 }
 
 /* controls */

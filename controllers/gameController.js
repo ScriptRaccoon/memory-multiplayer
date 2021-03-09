@@ -22,13 +22,13 @@ function startGame(socket, gameId) {
     const game = GAME_LIST.findGameById(gameId);
     if (!game) {
         socket.emit("redirectHome", { reason: "This game does not exist." });
-    } else if (game.players.length >= GAME_LIST.playerAmount) {
-        socket.emit("redirectHome", { reason: "This game is already full." });
-    } else {
-        game.players.push(socket);
+    } else if (game.players.length < GAME_LIST.playerAmount) {
+        game.addPlayer(socket);
         if (game.players.length === GAME_LIST.playerAmount) {
             game.start();
         }
+    } else {
+        game.addViewer(socket);
     }
 }
 
