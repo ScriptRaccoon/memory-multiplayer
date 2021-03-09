@@ -47,8 +47,19 @@ class Game {
     addViewer(socket) {
         this.viewers.push(socket);
         socket.join(this.id);
+        socket.join(this.id + "view");
         socket.emit("scores", this.scores);
-        socket.emit("viewer");
+        socket.emit("turnIndex", this.turn);
+        socket.emit("viewMode");
+        for (const card of this.cards) {
+            if (card.state != CARD_STATES.CLOSED) {
+                socket.emit("openCard", {
+                    cardId: card.id,
+                    image: card.image,
+                    duration: turnDuration,
+                });
+            }
+        }
     }
 
     async start() {
@@ -75,6 +86,7 @@ class Game {
     showTurn() {
         this.currentPlayer.emit("turn", true);
         this.otherPlayer.emit("turn", false);
+        io.to(this.id + "view").emit("turnIndex", this.turn);
     }
 
     showRound() {
@@ -147,8 +159,8 @@ class Game {
         this.canOpen = false;
         this.previousCard = null;
         if (cardA.image === cardB.image) {
-            cardA.status = CARD_STATES.PAIRED;
-            cardB.status = CARD_STATES.PAIRED;
+            cardA.state = CARD_STATES.PAIRED;
+            cardB.state = CARD_STATES.PAIRED;
             this.pairedCards += 2;
             this.canOpen = true;
             this.roundScore[this.turn]++;
@@ -182,10 +194,12 @@ class Game {
             this.scores[0]++;
             this.players[0].emit("message", "You won the round! 😀");
             this.players[1].emit("message", "You lost the round! 😕");
+            io.to(this.id + "view").emit("message", "Player 1 won the round.");
         } else {
             this.scores[1]++;
             this.players[0].emit("message", "You lost the round! 😕");
             this.players[1].emit("message", "You won the round! 😀");
+            io.to(this.id + "view").emit("message", "Player 2 won the round.");
         }
         this.showScores();
         setTimeout(() => {
@@ -203,9 +217,11 @@ class Game {
         } else if (this.scores[0] > this.scores[1]) {
             this.players[0].emit("message", "You won the game! 🎉");
             this.players[1].emit("message", "You lost the game! 😔");
+            io.to(this.id + "view").emit("message", "Player 1 won the game.");
         } else {
             this.players[0].emit("message", "You lost the game! 😔");
             this.players[1].emit("message", "You won the game! 🎉");
+            io.to(this.id + "view").emit("message", "Player 2 won the game.");
         }
     }
 }

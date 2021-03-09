@@ -43,13 +43,17 @@ function redirectHome() {
 }
 
 socket.on("turn", (isMyTurn) => {
-    if (isMyTurn) {
+    if (isMyTurn == true) {
         $("#status").html("It's your turn");
         $(".card").css("cursor", "pointer");
     } else {
         $("#status").html("It's your opponent's turn");
         $(".card").css("cursor", "default");
     }
+});
+
+socket.on("turnIndex", (index) => {
+    $("#status").html(`It's Player ${index + 1}'s turn`);
 });
 
 socket.on("openCard", ({ cardId, image, duration }) => {
@@ -109,6 +113,6 @@ $("#closeModal").click(() => {
     localStorage.setItem("resizeModal", 0);
 });
 
-socket.on("viewer", () => {
-    $("#status").text("You are viewing the game.");
+socket.on("viewMode", () => {
+    $("#title").text("Memory (View Mode)");
 });
