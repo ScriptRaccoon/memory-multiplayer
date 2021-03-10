@@ -84,8 +84,8 @@ class Game {
 
     showTurn() {
         io.to(this.id).emit("turnIndex", this.turn);
-        this.currentPlayer.emit("turn", true);
-        this.otherPlayer.emit("turn", false);
+        // this.currentPlayer.emit("turn", true);
+        // this.otherPlayer.emit("turn", false);
     }
 
     showRound() {
