@@ -33,9 +33,15 @@ function startGame(socket, gameId) {
 }
 
 function handleDisconnect(socket) {
-    const game = GAME_LIST.findGameByPlayer(socket);
-    if (!game) return;
-    GAME_LIST.removeGame(game, { reason: "The other player has disconnected." });
+    let game = GAME_LIST.findGameByPlayer(socket);
+    if (game) {
+        GAME_LIST.removeGame(game, { reason: "The other player has disconnected." });
+        return;
+    }
+    game = GAME_LIST.findGameByViewer(socket);
+    if (game) {
+        game.removeViewer(socket);
+    }
 }
 
 function openCard(socket, { gameId, cardId }) {

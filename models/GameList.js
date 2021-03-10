@@ -37,6 +37,10 @@ class GameList {
     findGameByPlayer(socket) {
         return this.list.find((game) => game.players.includes(socket));
     }
+
+    findGameByViewer(socket) {
+        return this.list.find((game) => game.viewers.includes(socket));
+    }
 }
 
 const GAME_LIST = new GameList();

@@ -215,15 +215,35 @@ a:hover {
     font-size: 25px;
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
 
-#controls > i {
+#controls i {
     opacity: 0.5;
     margin: 0px 5px;
     cursor: pointer;
 }
 
-#controls > i:hover {
+#controls i:hover {
+    opacity: 1;
+}
+
+#viewers {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 11px;
+    margin: 0;
+}
+
+#viewerAmount {
+    display: inline-block;
+    opacity: 0.5;
+    font-size: 14px;
+    transform: translateX(10px);
+}
+
+#viewerAmount:hover {
     opacity: 1;
 }
 

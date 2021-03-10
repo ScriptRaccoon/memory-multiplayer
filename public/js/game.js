@@ -114,3 +114,12 @@ $("#closeModal").click(() => {
 socket.on("viewMode", () => {
     $("#title").text("Memory (View Mode)");
 });
+
+socket.on("viewerAmount", (amount) => {
+    if (amount > 0) {
+        $("#viewers").show();
+        $("#viewerAmount").text(amount);
+    } else {
+        $("#viewers").hide();
+    }
+});

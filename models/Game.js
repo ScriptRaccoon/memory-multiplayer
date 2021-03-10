@@ -19,6 +19,7 @@ class Game {
         this.cardAmount = cardAmount;
         this.roundAmount = roundAmount;
         this.players = [];
+        this.viewers = [];
         this.scores = [0, 0];
         this.pairedCards = 0;
         this.previousCard = null;
@@ -44,8 +45,10 @@ class Game {
     }
 
     addViewer(socket) {
+        this.viewers.push(socket);
         socket.join(this.id);
         socket.join(this.id + "view");
+        io.to(this.id).emit("viewerAmount", this.viewers.length);
         socket.emit("round", this.round);
         socket.emit("scores", this.scores);
         socket.emit("turnIndex", this.turn);
@@ -59,6 +62,12 @@ class Game {
                 });
             }
         }
+    }
+
+    removeViewer(socket) {
+        const i = this.viewers.indexOf(socket);
+        this.viewers.splice(i, 1);
+        io.to(this.id).emit("viewerAmount", this.viewers.length);
     }
 
     async start() {
@@ -84,8 +93,6 @@ class Game {
 
     showTurn() {
         io.to(this.id).emit("turnIndex", this.turn);
-        // this.currentPlayer.emit("turn", true);
-        // this.otherPlayer.emit("turn", false);
     }
 
     showRound() {
