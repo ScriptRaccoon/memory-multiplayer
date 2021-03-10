@@ -23,7 +23,6 @@ socket.on("connect", () => {
 socket.on("index", (index) => {
     myIndex = index;
     $(`#player${index}`).text(`You`);
-    $(`#score${index}`).addClass("myScore");
     $(`#player${1 - index}`).text(`Opponent`);
 });
 
@@ -43,7 +42,7 @@ function redirectHome() {
 }
 
 socket.on("turn", (isMyTurn) => {
-    if (isMyTurn == true) {
+    if (isMyTurn) {
         $("#status").html("It's your turn");
         $(".card").css("cursor", "pointer");
     } else {
@@ -53,7 +52,8 @@ socket.on("turn", (isMyTurn) => {
 });
 
 socket.on("turnIndex", (index) => {
-    $("#status").html(`It's Player ${index + 1}'s turn`);
+    $(`.score`).removeClass("current");
+    $(`#score${index}`).addClass("current");
 });
 
 socket.on("openCard", ({ cardId, image, duration }) => {
@@ -96,6 +96,7 @@ socket.on("loading", (loading) => {
     if (loading) {
         $("#game").css("opacity", 0.4);
     } else {
+        $("#status").html("");
         $("#game").css("opacity", 1);
     }
 });
@@ -115,4 +116,5 @@ $("#closeModal").click(() => {
 
 socket.on("viewMode", () => {
     $("#title").text("Memory (View Mode)");
+    $("#status").html("");
 });

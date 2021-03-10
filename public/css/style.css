@@ -208,7 +208,7 @@ a:hover {
     border: 1px solid var(--card-inner-color);
 }
 
-.myScore {
+.score.current {
     border: 1px solid var(--link-color) !important;
 }
 
