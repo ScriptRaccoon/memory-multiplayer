@@ -144,7 +144,6 @@ class Game {
         io.to(this.id).emit("openCard", {
             cardId: cardId,
             image: card.image,
-            duration: turnDuration,
         });
         await sleep(turnDuration);
         if (!this.previousCard) {

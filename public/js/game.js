@@ -56,26 +56,15 @@ socket.on("turnIndex", (index) => {
     $(`#score${index}`).addClass("current");
 });
 
-socket.on("openCard", ({ cardId, image, duration }) => {
-    const card = $(`#card-${cardId}`).addClass("turned");
+socket.on("openCard", ({ cardId, image }) => {
+    const card = $(`#card-${cardId}`).addClass("flipped");
     card.children(".front").css("backgroundImage", `url(${image})`);
-    setTimeout(() => {
-        card.children(".front").css("zIndex", 1);
-        card.children(".back").css("zIndex", 0);
-    }, duration / 2);
-    setTimeout(() => {
-        card.removeClass("turned");
-    }, duration);
 });
 
 socket.on("closeCard", ({ cardId, duration }) => {
     const card = $(`#card-${cardId}`).addClass("turned");
+    card.removeClass("flipped");
     setTimeout(() => {
-        card.children(".front").css("zIndex", 0);
-        card.children(".back").css("zIndex", 1);
-    }, duration / 2);
-    setTimeout(() => {
-        card.removeClass("turned");
         card.children(".front").css("backgroundImage", "");
     }, duration);
 });
