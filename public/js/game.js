@@ -41,16 +41,6 @@ function redirectHome() {
     url.href = baseURL;
 }
 
-// socket.on("turn", (isMyTurn) => {
-//     if (isMyTurn) {
-//         $("#status").html("It's your turn");
-//         $(".card").css("cursor", "pointer");
-//     } else {
-//         $("#status").html("It's your opponent's turn");
-//         $(".card").css("cursor", "default");
-//     }
-// });
-
 socket.on("turnIndex", (index) => {
     $(`.score`).removeClass("current");
     $(`#score${index}`).addClass("current");
@@ -65,15 +55,26 @@ socket.on("turnIndex", (index) => {
     }
 });
 
-socket.on("openCard", ({ cardId, image }) => {
-    const card = $(`#card-${cardId}`).addClass("flipped");
+socket.on("openCard", ({ cardId, image, duration }) => {
+    const card = $(`#card-${cardId}`).addClass("turned");
     card.children(".front").css("backgroundImage", `url(${image})`);
+    setTimeout(() => {
+        card.children(".front").css("zIndex", 1);
+        card.children(".back").css("zIndex", 0);
+    }, duration / 2);
+    setTimeout(() => {
+        card.removeClass("turned");
+    }, duration);
 });
 
 socket.on("closeCard", ({ cardId, duration }) => {
     const card = $(`#card-${cardId}`).addClass("turned");
-    card.removeClass("flipped");
     setTimeout(() => {
+        card.children(".front").css("zIndex", 0);
+        card.children(".back").css("zIndex", 1);
+    }, duration / 2);
+    setTimeout(() => {
+        card.removeClass("turned");
         card.children(".front").css("backgroundImage", "");
     }, duration);
 });

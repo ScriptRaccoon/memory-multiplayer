@@ -113,7 +113,6 @@ a:hover {
     min-height: 170px;
     margin-bottom: 20px;
     border-radius: 5px;
-    perspective: 1500px;
 }
 
 /* cards */
@@ -124,8 +123,6 @@ a:hover {
     height: calc(var(--scale) * 140px);
     position: relative;
     display: none;
-    transition: transform 250ms;
-    transform-style: preserve-3d;
 }
 
 .card .front {
@@ -136,8 +133,8 @@ a:hover {
     background-position: center;
     background-size: cover;
     box-shadow: 0px 0px calc(var(--scale) * 10px) var(--card-shadow-color);
-    backface-visibility: hidden;
     transform: rotateY(180deg);
+    z-index: 0;
 }
 
 .card .back {
@@ -150,7 +147,7 @@ a:hover {
     align-items: center;
     justify-content: center;
     box-shadow: 0px 0px calc(var(--scale) * 10px) var(--card-shadow-color);
-    backface-visibility: hidden;
+    z-index: 1;
 }
 
 .back::before {
@@ -159,11 +156,24 @@ a:hover {
     height: calc(var(--scale) * 130px);
     background: var(--card-inner-color);
     border-radius: calc(var(--scale) * 10px);
-    backface-visibility: hidden;
 }
 
-.card.flipped {
-    transform: rotateY(180deg);
+/* card animation */
+
+.card.turned {
+    animation: turn-around 250ms linear;
+}
+
+@keyframes turn-around {
+    0% {
+        transform: rotateY(0deg);
+    }
+    50% {
+        transform: rotateY(90deg);
+    }
+    100% {
+        transform: rotateY(0deg);
+    }
 }
 
 /* status and score  */
