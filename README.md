@@ -2,7 +2,7 @@
 
 This is a multiplayer memory game app.
 
-https://playmemory.herokuapp.com/
+https://playmemory.onrender.com
 
 The app creates links, including a game id, which can be shared with anyone to start the game. You can also adjust the number of rounds as well as the number of cards per round (which has to be even).
 
